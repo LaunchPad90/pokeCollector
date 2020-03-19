@@ -8,6 +8,7 @@
     <a href="{% url 'detail' poke.id %}">
       <div class="card-content">
         <span class="card-title">{{ poke.name }}</span>
+        <p>Nickname: {{ poke.nickname }}</p>
         <p>Type: {{ poke.e_type }}</p>
         <p>Description: {{ poke.description }}</p>
         <p>Generation: {{ poke.generation }}</p>
