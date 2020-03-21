@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 
-from .models import Pokemon
+from .models import Pokemon, Move, Feeding
 from .forms import FeedingForm
 # Create your views here.
 
@@ -31,6 +32,15 @@ def add_feeding(request, pokemon_id):
         new_feeding.save()
     return redirect('detail', pokemon_id=pokemon_id)
 
+# def moves_list(request, move_id):
+#     Move.objects.all()
+#     return render(request, 'pokemon/moves_list.html', {'moves': moves})
+
+def assoc_move(request, pokemon_id, move_id):
+    Pokemon.objects.get(id=pokemon_id).moves.add(move_id)
+    return redirect('detail', pokemon_id=pokemon_id)
+
+
 class PokemonCreate(CreateView):
     model = Pokemon
     fields = '__all__'
@@ -44,3 +54,8 @@ class PokemonDelete(DeleteView):
     model = Pokemon
     success_url = '/pokemon/'
 
+class MoveList(ListView):
+    model = Move
+    
+class MoveDetail(DetailView):
+    model = Move    

@@ -11,6 +11,17 @@ MEALS = (
     ('D', 'Dinner'),
 )
 
+class Move(models.Model):
+    name = models.CharField(max_length=20)
+    m_type = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('move_detail', kwargs={'pk': self.id})
+    
+
 class Pokemon(models.Model):
     name = models.CharField(max_length=20)
     nickname = models.CharField(max_length=20)
@@ -43,11 +54,3 @@ class Feeding(models.Model):
     class Meta:
         ordering = ['-date']
 
-class Move(models.Model):
-    name: models.CharField(max_length=20)
-    m_type: models.CharField(max_length=20)
-
-    pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.name
