@@ -57,7 +57,7 @@
         <div class="card">
           <div class="card-content">
             <span class="card-title">
-              A {{ pokemon.name }} {{ move.name }}
+              {{ move.name }}
             </span>
           </div>
           <div class="card-action">
@@ -69,7 +69,7 @@
         </div>
       {% endfor %}
     {% else %}
-      <h5>Squirtle doesn't know any moves!</h5>
+      <h5>{{ pokemon.name }} doesn't know any moves!</h5>
     {% endif %}
   </div>
 

@@ -18,11 +18,12 @@ def pokemon_index(request):
 
 def pokemon_detail(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
+    moves_pokemon_doesnt_have = Move.objects.exclude(id__in = pokemon.moves.all().values_list('id'))
     feeding_form = FeedingForm()
     return render(request, 'pokemon/detail.html', {
         'pokemon': pokemon,
         'feeding_form': feeding_form,
-        'moves_lists': moves_list,
+        'moves': moves_pokemon_doesnt_have
     })
 
 def add_feeding(request, pokemon_id):
