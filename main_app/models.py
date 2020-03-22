@@ -19,7 +19,7 @@ class Move(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('moves_detail', kwargs={'pk': self.id})
+        return reverse('', kwargs={'pk': self.id})
     
 
 class Pokemon(models.Model):

@@ -22,7 +22,7 @@ def pokemon_detail(request, pokemon_id):
     return render(request, 'pokemon/detail.html', {
         'pokemon': pokemon,
         'feeding_form': feeding_form,
-        'moves_list': moves_list
+        'moves_lists': moves_list,
     })
 
 def add_feeding(request, pokemon_id):
@@ -35,12 +35,15 @@ def add_feeding(request, pokemon_id):
 
 def moves_list(request, move_id):
     Move.objects.all()
-    return render(request, 'moves/moves_list.html', {'moves': moves})
+    return render(request, 'moves/moves_list.html', {'moves_list': moves_list})
 
 def assoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.add(move_id)
     return redirect('detail', pokemon_id=pokemon_id)
 
+def unassoc_move(request, pokemon_id, move_id):
+    Pokemon.objects.get(id=pokemon_id).moves.remove(move_id)
+    return redirect('detail', pokemon_id=pokemon_id)
 
 class PokemonCreate(CreateView):
     model = Pokemon

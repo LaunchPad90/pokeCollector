@@ -48,6 +48,57 @@
   </div>
 </div>
 
+<hr>
+<div class="row">
+  <div class="col s6">
+    <h3>{{ pokemon.name }}'s Moves</h3>
+    {% if pokemon.moves.count %}
+      {% for move in pokemon.moves.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              A {{ pokemon.name }} {{ move.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'unassoc_move' pokemon.id move.id %}" method="post">
+                {% csrf_token %}
+              <button type="submit" class="btn">Remove</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>Squirtle doesn't know any moves!</h5>
+    {% endif %}
+  </div>
+
+  <div class="col s6">
+    <h3>Available Moves</h3>
+    {% if moves.count %}
+      {% for move in moves.all %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">
+              {{ move.name }}
+            </span>
+          </div>
+          <div class="card-action">
+            <form action="{% url 'assoc_move' pokemon.id move.id %}" method="post">
+                {% csrf_token %}
+              <button type="submit" class="btn">Add</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{pokemon.name}} Already Has All Moves Available</h5>
+    {% endif %}
+  </div>
+</div>
+
+
+
 <script>
   const dateEl = document.getElementById('id_date');
   M.Datepicker.init(dateEl, {
