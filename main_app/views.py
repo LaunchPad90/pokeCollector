@@ -21,7 +21,8 @@ def pokemon_detail(request, pokemon_id):
     feeding_form = FeedingForm()
     return render(request, 'pokemon/detail.html', {
         'pokemon': pokemon,
-        'feeding_form': feeding_form
+        'feeding_form': feeding_form,
+        'moves_list': moves_list
     })
 
 def add_feeding(request, pokemon_id):
@@ -43,8 +44,8 @@ def assoc_move(request, pokemon_id, move_id):
 
 class PokemonCreate(CreateView):
     model = Pokemon
-    fields = '__all__'
-    success_url = '/pokemon/'
+    fields = ['name', 'nickname', 'e_type', 'description', 'generation']
+
 
 class PokemonUpdate(UpdateView):
     model = Pokemon
@@ -59,3 +60,15 @@ class MoveList(ListView):
     
 class MoveDetail(DetailView):
     model = Move    
+
+class MoveCreate(CreateView):
+    model = Move
+    fields = '__all__'
+    
+class MoveUpdate(UpdateView):
+    model = Move
+    fields = '__all__'
+
+class MoveDelete(DeleteView):
+    model = Move
+    success_url = '/moves/'

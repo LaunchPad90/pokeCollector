@@ -12,5 +12,8 @@ urlpatterns = [
     path('pokemon/<int:pokemon_id>/add_feeding', views.add_feeding, name='add_feeding'),
     path('moves/', views.MoveList.as_view(), name='moves_list'),
     path('moves/<int:pk>/', views.MoveDetail.as_view(), name='moves_detail'),
+    path('moves/create/', views.MoveCreate.as_view(), name='moves_create'),
+    path('moves/<int:pk>/update/', views.MoveUpdate.as_view(), name='moves_update'),
+    path('moves/<int:pk>/delete/', views.MoveDelete.as_view(), name='moves_delete'),
 ]
 
