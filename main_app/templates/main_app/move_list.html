@@ -3,8 +3,8 @@
 
 <h1>Moves List</h1>
 
-{% for move in moves_list %}
-  <a href="{% url 'move_detail' move.id %}">
+{% for move in move_list %}
+  <a href="{% url 'moves_detail' move.id %}">
     <div class="card">
         <div class="card-content">
             <span class="card-title">{{ move.name }}</span>

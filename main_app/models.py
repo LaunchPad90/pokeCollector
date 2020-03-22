@@ -19,7 +19,7 @@ class Move(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('move_detail', kwargs={'pk': self.id})
+        return reverse('moves_detail', kwargs={'pk': self.id})
     
 
 class Pokemon(models.Model):
@@ -28,6 +28,7 @@ class Pokemon(models.Model):
     e_type = models.CharField(max_length=20)
     description = models.TextField(max_length=250)
     generation = models.IntegerField()
+    moves = models.ManyToManyField(Move)
 
     def __str__(self):
         return self.name

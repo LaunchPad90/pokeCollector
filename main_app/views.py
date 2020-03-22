@@ -32,9 +32,9 @@ def add_feeding(request, pokemon_id):
         new_feeding.save()
     return redirect('detail', pokemon_id=pokemon_id)
 
-# def moves_list(request, move_id):
-#     Move.objects.all()
-#     return render(request, 'pokemon/moves_list.html', {'moves': moves})
+def moves_list(request, move_id):
+    Move.objects.all()
+    return render(request, 'moves/moves_list.html', {'moves': moves})
 
 def assoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.add(move_id)
