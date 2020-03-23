@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 import uuid
 import boto3
@@ -66,9 +68,27 @@ def unassoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.remove(move_id)
     return redirect('detail', pokemon_id=pokemon_id)
 
+def signup(request):
+  error_message = ''
+  if request.method == 'POST':
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+      user = form.save()
+      login(request, user)
+      return redirect('index')
+    else:
+      error_message = 'Invalid sign up - try again'
+  form = UserCreationForm()
+  context = {'form': form, 'error_message': error_message}
+  return render(request, 'registration/signup.html', context)
+
 class PokemonCreate(CreateView):
     model = Pokemon
     fields = ['name', 'nickname', 'e_type', 'description', 'generation']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class PokemonUpdate(UpdateView):
