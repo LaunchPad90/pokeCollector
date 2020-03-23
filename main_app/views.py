@@ -2,8 +2,14 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 
-from .models import Pokemon, Move, Feeding
+import uuid
+import boto3
+
+from .models import Pokemon, Move, Feeding, Photo
 from .forms import FeedingForm
+
+S3_BASE_URL = 'https://s3-us-west-2.amazonaws.com/'
+BUCKET = 'catcollector1234'
 # Create your views here.
 
 def home(request):
@@ -37,6 +43,20 @@ def add_feeding(request, pokemon_id):
 def moves_list(request, move_id):
     Move.objects.all()
     return render(request, 'moves/moves_list.html', {'moves_list': moves_list})
+
+def add_photo(request, pokemon_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            photo = Photo(url=url, pokemon_id=pokemon_id)
+            photo.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('detail', pokemon_id=pokemon_id)
 
 def assoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.add(move_id)
