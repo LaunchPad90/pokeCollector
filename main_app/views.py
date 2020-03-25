@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 
 import uuid
@@ -24,6 +26,7 @@ def pokemon_index(request):
     pokemon = Pokemon.objects.all()
     return render(request, 'pokemon/index.html', { 'pokemon': pokemon })
 
+@login_required
 def pokemon_detail(request, pokemon_id):
     pokemon = Pokemon.objects.get(id=pokemon_id)
     moves_pokemon_doesnt_have = Move.objects.exclude(id__in = pokemon.moves.all().values_list('id'))
@@ -34,6 +37,7 @@ def pokemon_detail(request, pokemon_id):
         'moves': moves_pokemon_doesnt_have
     })
 
+@login_required
 def add_feeding(request, pokemon_id):
     form = FeedingForm(request.POST)
     if form.is_valid():
@@ -46,6 +50,7 @@ def moves_list(request, move_id):
     Move.objects.all()
     return render(request, 'moves/moves_list.html', {'moves_list': moves_list})
 
+@login_required
 def add_photo(request, pokemon_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
@@ -60,10 +65,12 @@ def add_photo(request, pokemon_id):
             print('An error occurred uploading file to S3')
     return redirect('detail', pokemon_id=pokemon_id)
 
+@login_required
 def assoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.add(move_id)
     return redirect('detail', pokemon_id=pokemon_id)
 
+@login_required
 def unassoc_move(request, pokemon_id, move_id):
     Pokemon.objects.get(id=pokemon_id).moves.remove(move_id)
     return redirect('detail', pokemon_id=pokemon_id)
@@ -82,7 +89,7 @@ def signup(request):
   context = {'form': form, 'error_message': error_message}
   return render(request, 'registration/signup.html', context)
 
-class PokemonCreate(CreateView):
+class PokemonCreate(LoginRequiredMixin, CreateView):
     model = Pokemon
     fields = ['name', 'nickname', 'e_type', 'description', 'generation']
 
@@ -91,11 +98,11 @@ class PokemonCreate(CreateView):
         return super().form_valid(form)
 
 
-class PokemonUpdate(UpdateView):
+class PokemonUpdate(LoginRequiredMixin, UpdateView):
     model = Pokemon
     fields = ['nickname', 'e_type', 'description', 'generation']
 
-class PokemonDelete(DeleteView):
+class PokemonDelete(LoginRequiredMixin, DeleteView):
     model = Pokemon
     success_url = '/pokemon/'
 
@@ -105,14 +112,14 @@ class MoveList(ListView):
 class MoveDetail(DetailView):
     model = Move    
 
-class MoveCreate(CreateView):
+class MoveCreate(LoginRequiredMixin, CreateView):
     model = Move
     fields = '__all__'
     
-class MoveUpdate(UpdateView):
+class MoveUpdate(LoginRequiredMixin, UpdateView):
     model = Move
     fields = '__all__'
 
-class MoveDelete(DeleteView):
+class MoveDelete(LoginRequiredMixin, DeleteView):
     model = Move
     success_url = '/moves/'
