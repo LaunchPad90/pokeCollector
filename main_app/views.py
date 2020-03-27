@@ -115,6 +115,7 @@ class MoveDetail(DetailView):
 class MoveCreate(LoginRequiredMixin, CreateView):
     model = Move
     fields = '__all__'
+    success_url = '/moves/'
     
 class MoveUpdate(LoginRequiredMixin, UpdateView):
     model = Move
