@@ -11,8 +11,10 @@
         <p>Type: {{ move.m_type }}</p>
       </div>
       <div class="card-action">
+        {% if request.user.id == move.user_id %}
         <a href="{% url 'moves_update' move.id %}">Edit</a>
         <a href="{% url 'moves_delete' move.id %}">Delete</a>
+        {% endif %}
       </div>
     </div>
   </div>
